@@ -1,0 +1,118 @@
+services:
+    epg_bundle.importerManager.healthtvde:
+        class: Joiz\EpgImporterBundle\ImporterManager\HealthtvImporterManager
+        arguments:
+            mapper: "@epg_bundle.healthTvV3Mapper"
+            doctrine: "@doctrine"
+            em: "@doctrine.orm.entity_manager"
+            logger: "@epg_bundle.helper.logger"
+            mailer: "@joizhardcore.mailer"
+            epgImporter: "@epg_bundle.epgImporter"
+            contentImporter: "@epg_bundle.contentImporter"
+            showUpdater: "@epg_bundle.show_updater"
+
+    epg_bundle.importerManager:
+        class: Joiz\EpgImporterBundle\ImporterManager\ImporterManager
+        arguments:
+            doctrine: "@doctrine"
+            em: "@doctrine.orm.entity_manager"
+            dm: "@doctrine_phpcr.odm.document_manager"
+            showImporter: "@epg_bundle.showImporter"
+            showCrImporter: "@epg_bundle.showCrImporter"
+            showInstanceImporter: "@epg_bundle.showInstanceImporter"
+            showInstanceCrImporter: "@epg_bundle.showInstanceCrImporter"
+            videoImporter: "@epg_bundle.videoImporter"
+            tagsImporter: "@epg_bundle.tagsImporter"
+            logger: "@epg_bundle.helper.logger"
+            mailer: "@joizhardcore.mailer"
+            epgImporter: "@epg_bundle.epgImporter"
+            contentImporter: "@epg_bundle.contentImporter"
+            showUpdater: "@epg_bundle.show_updater"
+
+    epg_bundle.show_updater:
+        class: Joiz\EpgImporterBundle\Importer\ShowUpdater
+        autowire: true
+
+    epg_bundle.contentImporter:
+        class: Joiz\EpgImporterBundle\ImporterManager\ContentImporter
+        autowire: true
+
+    epg_bundle.epgImporter:
+        class: Joiz\EpgImporterBundle\ImporterManager\EpgImporter
+        autowire: true
+
+    epg_bundle.showInstanceImporter:
+        class: Joiz\EpgImporterBundle\Importer\ShowInstanceImporter
+        autowire: true
+#        arguments:
+#            showInstanceRepository: "@joizhardcore.repository.showinstance"
+#            logger: "@epgImporter.helper.logger"
+
+    epg_bundle.showImporter:
+        class: Joiz\EpgImporterBundle\Importer\ShowImporter
+        autowire: true
+
+    epg_bundle.showCrImporter:
+        class: Joiz\EpgImporterBundle\Importer\ShowCrImporter
+        autowire: true
+
+    epg_bundle.showInstanceCrImporter:
+        class: Joiz\EpgImporterBundle\Importer\ShowInstanceCrImporter
+        autowire: true
+
+    epg_bundle.imageImporter:
+        class: Joiz\EpgImporterBundle\Importer\ImageImporter
+        arguments:
+            rootDir: %kernel.root_dir%
+
+    epg_bundle.videoImporter:
+        class: Joiz\EpgImporterBundle\Importer\VideoImporter
+        autowire: true
+
+    epg_bundle.tagsImporter:
+        class: Joiz\EpgImporterBundle\Importer\TagsImporter
+        autowire: true
+
+    epg_bundle.hmsImporter:
+        class: Joiz\EpgImporterBundle\ImporterRestClient\HmsImporter
+        autowire: true
+
+    epg_bundle.healthTvMapper:
+        class: Joiz\EpgImporterBundle\Mappers\HealthTvMapper
+        arguments:
+            EpgProgram: "@epg_bundle.epgProgram"
+            importer: "@epg_bundle.hmsImporter"
+            validator: "@validator"
+            logger: "@epg_bundle.helper.logger"
+
+    epg_bundle.epgProgram:
+        class: Joiz\EpgImporterBundle\Models\EpgProgram
+        arguments:
+            tagsImporter: "@epg_bundle.tagsImporter"
+            logger: "@epg_bundle.helper.logger"
+
+    epg_bundle.healthTvV3Mapper:
+        class: Joiz\EpgImporterBundle\Mappers\HealthTvMapperV3
+        arguments:
+            EpgProgram: "@epg_bundle.epgProgram"
+            importer: "@epg_bundle.hmsImporterV3"
+            validator: "@validator"
+            logger: "@epg_bundle.helper.logger"
+
+    epg_bundle.hmsImporterV3:
+        class: Joiz\EpgImporterBundle\ImporterRestClient\HmsImporterV3
+        autowire: true
+#        arguments:
+#            buzzBrowser: "@joizhardcore.buzzbrowser"
+#            logger: "@epgImporter.helper.logger"
+
+    epg_bundle.routeImporterManager:
+        class: Joiz\EpgImporterBundle\Importer\RouteImporter
+        arguments:
+            dm: "@doctrine_phpcr.odm.document_manager"
+            routeBasePath: %cmf_routing.dynamic.persistence.phpcr.route_basepath%
+
+    epg_bundle.helper.logger:
+        class: Joiz\EpgImporterBundle\Helpers\Logger
+        arguments:
+            em: "@doctrine.orm.entity_manager"
